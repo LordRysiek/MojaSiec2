@@ -46,10 +46,19 @@ class BoardTools:
             return True
 
         def playMove(self, board, move):
+            #print("Do playmove trafilo:")
+            #print(np.transpose(move))
+            #print("Board przed playmove:")
+            #print(np.transpose(board))
             for i in range(len(move)):
                 if move[i] == 1:
                     board[i] = 1
-                    return
-                elif move[i] == -1:
-                    board[9+i] = 1
-                    return
+            #print("Board po playmove:")
+            #print(np.transpose(board))
+            return
+
+        def swap(self, board):
+            buffer = np.copy(board[0:9, 0])
+            board[0:9,0]=board[9:18,0]
+            board[9:18,0]=buffer
+            return

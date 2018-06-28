@@ -4,24 +4,35 @@ from Tournament import Tournament
 from Displayer import Displayer
 import numpy as np
 
+#
+from Network import Layer
 
-playerRed = Network([18,50,9])
-playerBlue = Network([18,30,9])
+playerRed = Network([18,2,3,9])
+
+
 
 #print(playerRed.hiddenLayers[0].weights)
 #print(playerRed.hiddenLayers[1].weights)
 displayer = Displayer()
-tournament = Tournament(playerRed, playerBlue)
-tournament.playGame(0.1,0.1)
+print("///////////Player red://///////////")
+playerRed.displayText()
+highlights=[]
+database=[]
+for j in range(10):
+    tournament = Tournament(playerRed, playerRed)
+    for i in range(1):
+        tournament.playGame(0,0)
+    database = database + tournament.listOfMoveDatas
+    playerRed.learnFromGroupOfMoveDatas(database, 10)
+    highlights=[mv.board for mv in tournament.listOfMoveDatas[0:10]]
 
-"""tools = BoardTools()
-board = np.zeros((18,1))
-move = [0,0,0,0,0,0,0,1,0]
-tools.playMove(board, move)
-move = [0,0,0,0,-1,0,0,0,0]
-tools.playMove(board, move)
-move = [0,1,0,0,0,0,0,0,0]
-tools.playMove(board, move)
-print(board)
-displayer.display(board)"""
-displayer.display(tournament.listOfMoveDatas[2].board)
+
+print("///////////Player red://///////////")
+playerRed.displayText()
+tournament2 = Tournament(playerRed, playerRed)
+for i in range(1):
+    tournament2.playGame(0,0)
+
+superBowl = highlights+[mv.board for mv in tournament2.listOfMoveDatas[0:10]]
+displayer.displaySequence(superBowl)
+ 

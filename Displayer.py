@@ -8,7 +8,7 @@ WHITE = (255,255,255)
 class Displayer:
     def __init__(self):
         pass
-    def display(self, board):
+    def display(self, board, crossFirst):
         pygame.init()
         window = pygame.display.set_mode((490, 490))
         pygame.display.set_caption("Kolko i krzyzyk (work in progress)")
@@ -22,10 +22,10 @@ class Displayer:
                 isSign = False
                 if board[x*3+y] == 1:
                     isSign = True
-                    isCross = True
+                    isCross = crossFirst
                 elif board[9+x*3+y] == 1:
                     isSign = True
-                    isCross = False
+                    isCross = not crossFirst
                 if isSign:
                     spritesList[x*3+y].placeSign(isCross)
 
@@ -41,6 +41,15 @@ class Displayer:
         carryOn = True
         while carryOn:
             for event in pygame.event.get():
-                 if event.type == QUIT:
+                 if event.type == QUIT or pygame.key.get_pressed()[pygame.K_SPACE]:
                     carryOn = False
-        return False
+        return
+
+    def displaySequence(self, sequence):
+        crossFirst = True
+
+        for board in sequence:
+            if np.array_equal(board, np.zeros((18,1))):
+                crossFirst = False
+            self.display(board, crossFirst)
+            crossFirst = not crossFirst

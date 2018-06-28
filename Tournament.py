@@ -42,11 +42,20 @@ class Game:
                 move = np.zeros((9,1))
                 index = random.randint(0, 8)
                 move[index, 0] = 1
+            #print("Appendowanie ")
+            #print(np.transpose(move))
+            #print("Board: ")
+            #print(np.transpose(self.board))
             self.listOfMoveDatas.append(MoveData(self.board, move))
         else:
-            move[np.argmax(player.processVector(self.board*self.whoIsPlayingNow))]=1
+            move[np.argmax(player.processVector(self.board))]=1
             self.listOfMoveDatas.append(MoveData(self.board, move))
+            #print("Appendowanie ")
+            #print(np.transpose(move))
+            #print("Board: ")
+            #print(np.transpose(self.board))
             if not self.tools.checkLegality(self.board, move):
+                #print("Nielegalny ruch")
                 self.whoWon = -self.whoIsPlayingNow
                 self.scoreMoves()
                 return False
@@ -58,6 +67,7 @@ class Game:
             return False
 
         self.whoIsPlayingNow = -self.whoIsPlayingNow
+        self.tools.swap(self.board)
         return True
 
     def scoreMoves(self):
@@ -70,6 +80,6 @@ class Game:
 
 class MoveData:
     def __init__(self, board, move):
-        self.board = board
-        self.move = move
+        self.board = np.copy(board)
+        self.move = np.copy(move)
         self.points = 0
